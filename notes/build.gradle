@@ -12,11 +12,22 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	jaxb
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+	implementation("wsdl4j:wsdl4j:1.6.3")
+	jaxb (
+			'com.sun.xml.bind:jaxb-xjc:2.2.7',
+			'com.sun.xml.bind:jaxb-impl:2.2.7'
+	)
+
 	runtimeOnly 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -26,3 +37,24 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+task jaxb {
+	def jaxbTargetDir = file("src/generated-sources/java")
+	doLast {
+		jaxbTargetDir.mkdirs()
+		ant.taskdef(
+				name: 'xjc',
+				classname: 'com.sun.tools.xjc.XJCTask',
+				classpath: configurations.jaxb.asPath
+		)
+		ant.jaxbTargetDir = jaxbTargetDir
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.notes',
+				schema: 'src/main/resources/wsdl/notes.wsdl'
+		) {
+			arg(value: "-wsdl")
+		}
+	}
+}
+compileJava.dependsOn jaxb
