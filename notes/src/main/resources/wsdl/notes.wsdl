@@ -165,7 +165,7 @@
                 <soap:body use="literal" parts="GetNotesByUserRequest"/>
             </wsdl:input>
             <wsdl:output>
-                <soap:body use="literal" parts="SimpleResponse"/>
+                <soap:body use="literal" parts="NoteList"/>
             </wsdl:output>
             <wsdl:fault name="Fault">
                 <soap:fault use="literal" name="Fault"/>
