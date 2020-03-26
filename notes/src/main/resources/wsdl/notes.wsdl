@@ -126,7 +126,7 @@
     <wsdl:portType name="notesServicesPort">
         <wsdl:operation name="getNotesByUser">
             <wsdl:input message="notes:GetNotesByUserRequest"/>
-            <wsdl:output message="notes:SimpleResponse"/>
+            <wsdl:output message="notes:NoteList"/>
             <wsdl:fault name="Fault" message="notes:Fault"/>
         </wsdl:operation>
         <wsdl:operation name="getNote">
@@ -165,7 +165,7 @@
                 <soap:body use="literal" parts="GetNotesByUserRequest"/>
             </wsdl:input>
             <wsdl:output>
-                <soap:body use="literal" parts="SimpleResponse"/>
+                <soap:body use="literal" parts="NoteList"/>
             </wsdl:output>
             <wsdl:fault name="Fault">
                 <soap:fault use="literal" name="Fault"/>
