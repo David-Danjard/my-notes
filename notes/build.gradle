@@ -6,7 +6,6 @@ plugins {
 
 group = 'com.my.notes'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '13'
 
 repositories {
 	mavenCentral()
@@ -37,9 +36,16 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+def jaxbTargetDir = file("src/generated-sources/java")
+sourceSets {
+	main {
+		java.srcDirs "$jaxbTargetDir"
+	}
+}
 
 task jaxb {
-	def jaxbTargetDir = file("src/generated-sources/java")
+	group 'generation'
+	System.setProperty('javax.xml.accessExternalSchema', 'all')
 	doLast {
 		jaxbTargetDir.mkdirs()
 		ant.taskdef(
@@ -51,7 +57,9 @@ task jaxb {
 		ant.xjc(
 				destdir: '${jaxbTargetDir}',
 				package: 'com.my.notes.notes',
-				schema: 'src/main/resources/wsdl/notes.wsdl'
+				schema: 'src/main/resources/wsdl/notes.wsdl',
+				encoding: 'UTF-8',
+				binding: 'src/main/resources/binding/jaxbBinding.xjb'
 		) {
 			arg(value: "-wsdl")
 		}
