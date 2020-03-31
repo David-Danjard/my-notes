@@ -76,9 +76,11 @@
 					<sources>
 						<source>${project.basedir}/src/main/resources/xsd/user.xsd</source>
 					</sources>
+					<xjbSources>
+						<xjbSource>../resources/binding/jaxbBinding.xjb</xjbSource>
+					</xjbSources>
 					<packageName>com.my.notes.users</packageName>
 					<clearOutputDir>false</clearOutputDir>
-					<bindingFiles>../resources/binding/jaxbBinding.xjb</bindingFiles>
 					<arguments>-extension</arguments>
 				</configuration>
 			</plugin>
