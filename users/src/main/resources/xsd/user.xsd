@@ -4,6 +4,22 @@
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
 
+    <xs:element name="userBeanCreationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:userBean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="userBeanUpdateRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:userBean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="userBean">
         <xs:complexType>
             <xs:sequence>
@@ -71,7 +87,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="simpleResponse">
+    <xs:element name="simpleMessage">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="status" type="xs:string"/>
