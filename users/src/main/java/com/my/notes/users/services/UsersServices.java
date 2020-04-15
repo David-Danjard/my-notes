@@ -7,6 +7,7 @@ import com.my.notes.users.mappers.UserMapper;
 import com.my.notes.users.model.User;
 import com.my.notes.users.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,14 +15,21 @@ public class UsersServices {
 
     private UsersRepository usersRepository;
     private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsersServices(UsersRepository usersRepository, UserMapper userMapper) {
+    public UsersServices(UsersRepository usersRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void createUser(UserBean userBean) {
+        userBean.setPassword(
+                passwordEncoder.encode(
+                        userBean.getPassword()
+                )
+        );
         usersRepository.saveAndFlush(
                 userMapper.convertToUserModel(userBean)
         );
@@ -35,7 +43,11 @@ public class UsersServices {
         User user = usersRepository.findById(userBean.getId())
                 .orElseThrow(() -> new UserException("L'utilisateur " + userBean.getId() + " n'existe pas."));
         user.setEmail(userBean.getEmail());
-        user.setPassword(userBean.getPassword());
+        userBean.setPassword(
+                passwordEncoder.encode(
+                        userBean.getPassword()
+                )
+        );
         user.setName(userBean.getName());
         user.setSurname(userBean.getSurname());
         usersRepository.saveAndFlush(user);
