@@ -6,12 +6,16 @@ import com.my.notes.auth.exceptions.UnauthorizedException;
 import com.my.notes.auth.mappers.UserMapper;
 import com.my.notes.auth.model.User;
 import com.my.notes.auth.repository.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServices {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthServices.class);
 
     private final UsersRepository usersRepository;
     private final UserMapper userMapper;
@@ -30,7 +34,10 @@ public class AuthServices {
         if (!passwordEncoder.matches(userPasswordToken.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("Invalid password");
         }
-        return userMapper.convertToUserBean(user);
+        LOGGER.info("User roles {} {}", user.getRole().get(0).getRole(), user.getRole());
+        UserBean userBean = userMapper.convertToUserBean(user);
+        LOGGER.info("UserBean roles {}", userBean.getRole());
+        return userBean;
     }
 
 }

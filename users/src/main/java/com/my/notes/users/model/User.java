@@ -13,7 +13,7 @@ public class User {
     private String surname;
     private String email;
     private String password;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> role;
 
     public int getId() {
