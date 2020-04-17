@@ -6,16 +6,28 @@ plugins {
 
 group = 'com.my.notes'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '13'
 
 repositories {
 	mavenCentral()
+}
+configurations {
+	jaxb
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
+	implementation("wsdl4j:wsdl4j:1.6.3")
+	compile('org.glassfish.jaxb:jaxb-runtime:2.3.0')
+	jaxb (
+			'com.sun.xml.bind:jaxb-xjc:2.2.7',
+			'com.sun.xml.bind:jaxb-impl:2.2.7'
+	)
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -24,3 +36,41 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+def jaxbTargetDir = file("src/generated-sources/java")
+sourceSets {
+	main {
+		java.srcDirs "$jaxbTargetDir"
+	}
+}
+
+task jaxb {
+	group 'generation'
+	System.setProperty('javax.xml.accessExternalSchema', 'all')
+	doLast {
+		jaxbTargetDir.mkdirs()
+		ant.taskdef(
+				name: 'xjc',
+				classname: 'com.sun.tools.xjc.XJCTask',
+				classpath: configurations.jaxb.asPath
+		)
+		ant.jaxbTargetDir = jaxbTargetDir
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.mails',
+				schema: 'src/main/resources/xsd/email.xsd',
+				encoding: 'UTF-8'
+		) {
+			arg(value: "-extension")
+		}
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.stc',
+				schema: 'src/main/resources/xsd/standard.xsd',
+				encoding: 'UTF-8'
+		) {
+			arg(value: "-extension")
+		}
+	}
+}
+compileJava.dependsOn jaxb
+

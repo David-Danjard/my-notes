@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:email="http://mynotes.com/wsdl/email" xmlns:xd="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:mail="http://my-notes/notes/email"
+                  xmlns:std="http://my-notes/notes/standard"
+                  targetNamespace="http://mynotes.com/wsdl/email">
+
+    <!-- Definition des types -->
+    <wsdl:types>
+        <xsd:schema>
+            <xsd:import namespace="http://my-notes/notes/standard"
+                        schemaLocation="standard.xsd"/>
+        </xsd:schema>
+        <xsd:schema>
+            <xsd:import namespace="http://my-notes/notes/email"
+                        schemaLocation="email.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- Definition des messages -->
+    <wsdl:message name="SimpleResponse">
+        <wsdl:part name="SimpleResponse" element="std:SimpleResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Fault">
+        <wsdl:part name="Fault" element="std:Fault"/>
+    </wsdl:message>
+    <wsdl:message name="Email">
+        <wsdl:part name="Email" element="mail:Email"/>
+    </wsdl:message>
+
+    <!-- Definition des operations -->
+    <wsdl:portType name="emailServicesPort">
+        <wsdl:operation name="sendHTMLEmail">
+            <wsdl:input message="email:Email"/>
+            <wsdl:output message="email:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="email:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="sendTextEmail">
+            <wsdl:input message="email:Email"/>
+            <wsdl:output message="email:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="email:Fault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Binding SoapAction / Operations / messages -->
+    <wsdl:binding name="emailServicesPortHTTPBinding" type="email:emailServicesPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="sendHTMLEmail">
+            <soap:operation soapAction="/sendHtmlEmail"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Email"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="sendTextEmail">
+            <soap:operation soapAction="/sendTextEmail"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Email"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Definition de l'URL du service -->
+    <wsdl:service name="emailService">
+        <wsdl:port name="emailServicesPortHTTP" binding="email:emailServicesPortHTTPBinding">
+            <soap:address location="http://localhost:8080/email-service/ws/email"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
