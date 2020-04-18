@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <!-- default header name is X-CSRF-TOKEN -->
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <title>My Notes</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Rubik:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <link rel="stylesheet" th:href="@{css/styles.css}"/>
+    </head>
+    <body>
+        <header>
+            <div class="col-sm-12 text-right">
+                <a th:href="@{/logout}"><i class="fas fa-sign-out-alt" title="Deconnection"></i></a>
+            </div>
+        </header>
+        <section class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h1>My notes application</h1><br>
+                    <h3>Ma petite application de prise de notes</h3>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Ajouter une note</h2>
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" placeholder="Titre" id="add-note-title"/>
+                    <textarea id="add-note-content" placeholder="Contenu de la note"></textarea>
+                    <button id="add-note-btn" class="btn btn-info" onclick="saveNote()">Sauver cette note</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Mes notes</h2>
+                </div>
+                <div class="notes-container col-md-6" th:each="note : ${notes}">
+                    <div class="card note-card">
+                        <!-- ICI on affiche chaque note sous forme de carte -->
+                        <div th:id="'card-body-' + ${note.getId()}" class="card-body">
+                            <h5 class="card-title text-center" th:text="${note.getTitle()}"></h5>
+                            <p class="card-text card-mail-form">
+                                <select>
+                                    <option th:each="user : ${users}" th:value="${user.getId()}" th:text="${user.getName()}"></option>
+                                </select>
+                                <i class="fas fa-check" th:onclick="'sendShareRequest('+${note.getId()}+')'"></i>
+                                <i class="fas fa-times" th:onclick="'aboardShareRequest('+${note.getId()}+')'"></i>
+                            </p>
+                            <p class="card-text text-right card-menu">
+                                <i class="far fa-envelope" title="envoyer par email" th:onclick="'sendNote('+${note.getId()}+')'"></i>&nbsp;&nbsp;&nbsp;
+                                <i class="fas fa-edit" title="modifier la note" th:onclick="'updateNote('+${note.getId()}+')'"></i>&nbsp;&nbsp;&nbsp;
+                                <i class="fas fa-trash" title="supprimer la note" th:onclick="'deleteNote('+${note.getId()}+')'"></i>
+                            </p>
+                            <p class="card-text card-content" th:text="${note.getContent()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+
+            <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+            <script th:src="@{js/common.js}"></script>
+        </footer>
+    </body>
+</html>

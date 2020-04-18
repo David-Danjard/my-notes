@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UsersServices {
 
@@ -22,6 +25,17 @@ public class UsersServices {
         this.usersRepository = usersRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<UserBean> getUsers() {
+        List<UserBean> userBeans = new ArrayList<>();
+        usersRepository.findAll().forEach(user -> {
+            user.setPassword("");
+            userBeans.add(
+                    userMapper.convertToUserBean(user)
+            );
+        });
+        return userBeans;
     }
 
     public void createUser(UserBean userBean) {

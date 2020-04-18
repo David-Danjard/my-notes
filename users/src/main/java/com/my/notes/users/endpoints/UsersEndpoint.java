@@ -25,6 +25,16 @@ public class UsersEndpoint {
         this.usersServices = usersServices;
     }
 
+    @PayloadRoot(namespace = XSD_NAMESPACE, localPart = "userListRequest")
+    @ResponsePayload
+    public UserList getUsers(@RequestPayload UserListRequest userListRequest){
+        UserList userList = new UserList();
+        userList.getUserBean().addAll(
+                usersServices.getUsers()
+        );
+        return userList;
+    }
+
     @PayloadRoot(namespace = XSD_NAMESPACE, localPart = "userBeanCreationRequest")
     @ResponsePayload
     public SimpleMessage createUser(@RequestPayload UserBeanCreationRequest userBeanRequest){
