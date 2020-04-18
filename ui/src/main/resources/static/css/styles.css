@@ -4,7 +4,7 @@ body {
     font-family: 'Rubik', 'Roboto', sans-serif;
 }
 body {
-    background: linear-gradient(135deg, #e0f7fa, #fff8e1);
+    background: linear-gradient(135deg, #e0f7fa, #fffdf8);
 }
 h1, h2, h3, h4, h5, h6 {
     color: white;
