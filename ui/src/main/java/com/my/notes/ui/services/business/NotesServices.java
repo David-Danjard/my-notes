@@ -43,4 +43,12 @@ public class NotesServices {
         notesSoapClient.callWebService(note, new SoapActionCallback("/addNote"));
     }
 
+    public void updateNote(Note note) {
+        NoteUpdate noteUpdate = new NoteUpdate();
+        noteUpdate.setContent(note.getContent());
+        noteUpdate.setTitle(note.getContent());
+        noteUpdate.setId(note.getId());
+        notesSoapClient.callWebService(noteUpdate, new SoapActionCallback("/NoteUpdate"));
+    }
+
 }

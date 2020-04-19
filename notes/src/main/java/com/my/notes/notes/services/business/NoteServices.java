@@ -10,6 +10,7 @@ import com.my.notes.notes.services.soap.SoapClient;
 import com.my.notes.users.UserBean;
 import com.my.notes.users.UserList;
 import com.my.notes.users.UserListRequest;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,10 @@ public class NoteServices {
         );
         oldNote.setTitle(noteUpdate.getTitle());
         oldNote.setContent(noteUpdate.getContent());
-        oldNote.setOwner(noteUpdate.getOwner());
+        if (noteUpdate.getOwner() > 0) {
+            // we update the owner just if it is asked
+            oldNote.setOwner(noteUpdate.getOwner());
+        }
         oldNote.setUpdatedAt(LocalDateTime.now());
         noteRepository.saveAndFlush(oldNote);
     }

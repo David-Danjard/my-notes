@@ -50,7 +50,7 @@ public class MyNotesRestController {
 
     @PutMapping("/update")
     public void updateNote(Note note) {
-        //notesRepo.updateById(note);
+        notesServices.updateNote(note);
     }
 
 }
