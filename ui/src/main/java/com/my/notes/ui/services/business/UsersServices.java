@@ -1,6 +1,8 @@
 package com.my.notes.ui.services.business;
 
 import com.my.notes.ui.services.soap.SoapClient;
+import my_notes.notes.user.UserBean;
+import my_notes.notes.user.UserByMailRequest;
 import my_notes.notes.user.UserList;
 import my_notes.notes.user.UserListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,12 @@ public class UsersServices {
 
     public UserList getUsers() {
         return (UserList) usersSoapClient.callWebService(new UserListRequest(), new SoapActionCallback("http://my-notes/notes/user/UsersPort/userListRequest"));
+    }
+
+    public UserBean getUserByEmail(String userEmail) {
+        UserByMailRequest userByMailRequest = new UserByMailRequest();
+        userByMailRequest.setEmail(userEmail);
+        return  (UserBean) usersSoapClient.callWebService(userByMailRequest, new SoapActionCallback(""));
     }
 
 }

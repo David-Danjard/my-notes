@@ -1,10 +1,7 @@
 package com.my.notes.ui.services.business;
 
 import com.my.notes.ui.services.soap.SoapClient;
-import generated.GetNotesByUserRequest;
-import generated.NoteList;
-import generated.ShareNoteRequest;
-import generated.SimpleResponse;
+import generated.*;
 import my_notes.notes.user.UserBean;
 import my_notes.notes.user.UserByMailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +14,11 @@ public class NotesServices {
 
     private static final String SHARE_NOTE_SOAP_ACTION = "/shareNote";
     private final SoapClient notesSoapClient;
-    private final SoapClient usersSoapClient;
+    private final UsersServices usersServices;
 
-    public NotesServices(@Qualifier("notesSoapClient") SoapClient soapClient, @Qualifier("usersSoapClient") SoapClient usersSoapClient) {
+    public NotesServices(@Qualifier("notesSoapClient") SoapClient soapClient, UsersServices usersServices) {
         this.notesSoapClient = soapClient;
-        this.usersSoapClient = usersSoapClient;
+        this.usersServices = usersServices;
     }
 
     public SimpleResponse shareNote(int userId, int noteId) {
@@ -34,14 +31,16 @@ public class NotesServices {
 
     public NoteList getNotesByUser(String userEmail) {
         // Get the user information to get de the user id
-        UserByMailRequest userByMailRequest = new UserByMailRequest();
-        userByMailRequest.setEmail(userEmail);
-        UserBean userBean = (UserBean) usersSoapClient.callWebService(userByMailRequest, new SoapActionCallback(""));
+        UserBean userBean = usersServices.getUserByEmail(userEmail);
 
         // Create the get notes by user request
         GetNotesByUserRequest getNotesByUserRequest = new GetNotesByUserRequest();
         getNotesByUserRequest.setUserId(userBean.getId());
         return (NoteList) notesSoapClient.callWebService(getNotesByUserRequest, new SoapActionCallback("/getNotesByUser"));
+    }
+
+    public void addNote(Note note) {
+        notesSoapClient.callWebService(note, new SoapActionCallback("/addNote"));
     }
 
 }
