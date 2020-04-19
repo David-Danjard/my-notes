@@ -27,6 +27,14 @@ public class UsersServices {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserBean getUserByEmail(String email) throws UserException {
+        return userMapper.convertToUserBean(
+                usersRepository.findByEmail(email).orElseThrow(
+                        () -> new UserException("User not found")
+                )
+        );
+    }
+
     public List<UserBean> getUsers(int userId) throws UserException {
         List<UserBean> userBeans = new ArrayList<>();
         if (userId == 0) {

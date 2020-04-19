@@ -35,6 +35,14 @@ public class UsersEndpoint {
         return userList;
     }
 
+    @PayloadRoot(namespace = XSD_NAMESPACE, localPart = "userByMailRequest")
+    @ResponsePayload
+    public UserBean getUserByMail(@RequestPayload UserByMailRequest userByMailRequest) throws UserException {
+        return usersServices.getUserByEmail(
+                userByMailRequest.getEmail()
+        );
+    }
+
     @PayloadRoot(namespace = XSD_NAMESPACE, localPart = "userBeanCreationRequest")
     @ResponsePayload
     public SimpleMessage createUser(@RequestPayload UserBeanCreationRequest userBeanRequest){
