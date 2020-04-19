@@ -17,7 +17,7 @@ public class NotesRepo {
     @PostConstruct
     public void init() {
         notes = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 1; i < 3; i++) {
             Note note = new Note();
             note.setId(i);
             note.setTitle("Note "+i+" title");

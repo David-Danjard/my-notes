@@ -2,8 +2,11 @@ package com.my.notes.ui.endpoints;
 
 import com.my.notes.ui.model.Note;
 import com.my.notes.ui.repository.NotesRepo;
+import com.my.notes.ui.services.business.NotesServices;
+import generated.SimpleResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +16,11 @@ public class MyNotesRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MyNotesRestController.class);
     private final NotesRepo notesRepo;
+    private final NotesServices notesServices;
 
-    public MyNotesRestController(NotesRepo notesRepo) {
+    public MyNotesRestController(NotesRepo notesRepo, NotesServices notesServices) {
         this.notesRepo = notesRepo;
+        this.notesServices = notesServices;
     }
 
     @PostMapping("/add")
@@ -27,8 +32,8 @@ public class MyNotesRestController {
     @GetMapping("/share/{note-id}/{user-id}")
     public void shareNote(@PathVariable("note-id") int noteId,
                           @PathVariable("user-id") int userId) {
-        // Nothing todo now
-        LOGGER.info("Share note {} with {}", noteId, userId);
+        SimpleResponse simpleResponse = notesServices.shareNote(userId, noteId);
+        LOGGER.info("Share note {} with {} status {} / message {}", noteId, userId, simpleResponse.getStatus(), simpleResponse.getMessage());
     }
 
     @DeleteMapping("/{id}")

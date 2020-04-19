@@ -1,4 +1,4 @@
-package com.my.notes.ui.services.soap;
+package com.my.notes.notes.services.soap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +10,13 @@ import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 public class SoapClient extends WebServiceGatewaySupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoapClient.class);
+
     private String userName;
     private String pwd;
 
-    public SoapClient(String userName, String pwd) {
-        this.userName = userName;
+    public SoapClient(String username, String pwd) {
         this.pwd = pwd;
+        this.userName = username;
     }
 
     public Object callWebService(Object request, WebServiceMessageCallback msgCallback) {

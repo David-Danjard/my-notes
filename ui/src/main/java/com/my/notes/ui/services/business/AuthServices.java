@@ -15,11 +15,6 @@ public class AuthServices {
     private static final String AUTH_SOAP_ACTION = "http://my-notes/notes/auth/AuthPort/identificationRequest";
     private final SoapClient soapClient;
 
-    @Value("${services.soap.auth.username}")
-    private String userName;
-    @Value("${services.soap.auth.pwd}")
-    private String pwd;
-
     public AuthServices(@Qualifier("authSoapClient") SoapClient soapClient) {
         this.soapClient = soapClient;
     }
@@ -28,7 +23,7 @@ public class AuthServices {
         IdentificationRequest identificationRequest = new IdentificationRequest();
         identificationRequest.setUserPasswordToken(userPasswordToken);
 
-        return (UserBean) soapClient.callWebService(identificationRequest, new SoapActionCallback(AUTH_SOAP_ACTION), userName, pwd);
+        return (UserBean) soapClient.callWebService(identificationRequest, new SoapActionCallback(AUTH_SOAP_ACTION));
     }
 
 }

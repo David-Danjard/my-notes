@@ -2,8 +2,9 @@ package com.my.notes.notes.endpoints;
 
 import com.my.notes.notes.*;
 import com.my.notes.notes.exceptions.NoteNotFoundException;
+import com.my.notes.notes.exceptions.NoteServiceException;
 import com.my.notes.notes.mappers.NotesMapper;
-import com.my.notes.notes.services.NoteServices;
+import com.my.notes.notes.services.business.NoteServices;
 import com.my.notes.notes.utils.SimpleResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class NotesEndpoint {
 
     @SoapAction("/shareNote")
     @ResponsePayload
-    public SimpleResponse shareNote(@RequestPayload ShareNoteRequest shareNoteRequest) throws NoteNotFoundException {
+    public SimpleResponse shareNote(@RequestPayload ShareNoteRequest shareNoteRequest) throws NoteServiceException {
         LOGGER.info("Appel sur le endpoint de partage d'une note, pour la note {} vers l'utilisateur {}", shareNoteRequest.getNoteId(), shareNoteRequest.getUserId());
         noteServices.shareNote(shareNoteRequest.getNoteId(), shareNoteRequest.getUserId());
         return SimpleResponseUtils.getSuccessResponse("Note  " + shareNoteRequest.getNoteId() + " envoyée à l'utilisateur " + shareNoteRequest.getUserId());

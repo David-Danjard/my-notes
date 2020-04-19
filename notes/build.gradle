@@ -65,6 +65,30 @@ task jaxb {
 		) {
 			arg(value: "-wsdl")
 		}
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.users',
+				schema: 'src/main/resources/xsd/user.xsd',
+				encoding: 'UTF-8'
+		) {
+			arg(value: "-extension")
+		}
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.email',
+				schema: 'src/main/resources/xsd/email.xsd',
+				encoding: 'UTF-8'
+		) {
+			arg(value: "-extension")
+		}
+		ant.xjc(
+				destdir: '${jaxbTargetDir}',
+				package: 'com.my.notes.std',
+				schema: 'src/main/resources/xsd/standard.xsd',
+				encoding: 'UTF-8'
+		) {
+			arg(value: "-extension")
+		}
 	}
 }
 compileJava.dependsOn jaxb

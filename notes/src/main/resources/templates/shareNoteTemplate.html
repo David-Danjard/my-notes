@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Wild Adventure - confirmation">
+    <meta name="author" content="DANJARD David">
+
+    <title>My notes - partage de note</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Mandali&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header>
+    <!-- Not needed in this template -->
+</header>
+
+<main class="container">
+    <div class="row">
+        <p>
+            <strong>Bonjour, je souhaiterai partager une note avec toi, la voici :</strong>
+        </p>
+    </div>
+    <div class="row">
+        <h1 th:text="${title}"></h1>
+        <p th:text="${content}"></p>
+    </div>
+</main>
+
+<footer>
+    <!-- Not needed in this template -->
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

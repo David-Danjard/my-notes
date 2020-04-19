@@ -27,14 +27,25 @@ public class UsersServices {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<UserBean> getUsers() {
+    public List<UserBean> getUsers(int userId) throws UserException {
         List<UserBean> userBeans = new ArrayList<>();
-        usersRepository.findAll().forEach(user -> {
+        if (userId == 0) {
+            // no userId provided => return all users
+            usersRepository.findAll().forEach(user -> {
+                user.setPassword("");
+                userBeans.add(
+                        userMapper.convertToUserBean(user)
+                );
+            });
+        } else {
+            // userId provided => search this user
+            User user = usersRepository.findById(userId).orElseThrow(() -> new UserException("Pas d'utilisateur avec l'id "+userId));
             user.setPassword("");
             userBeans.add(
                     userMapper.convertToUserBean(user)
             );
-        });
+        }
+
         return userBeans;
     }
 

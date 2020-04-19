@@ -92,11 +92,25 @@
 							<arguments>-extension</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>xjc-3</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.basedir}/src/main/resources/wsdl/notes.wsdl</source>
+							</sources>
+							<clearOutputDir>false</clearOutputDir>
+						</configuration>
+					</execution>
 				</executions>
 				<configuration>
 					<sources>
 						<source>${project.basedir}/src/main/resources/xsd</source>
+						<source>${project.basedir}/src/main/resources/wsdl</source>
 					</sources>
+					<sourceType>wsdl</sourceType>
 				</configuration>
 			</plugin>
 		</plugins>

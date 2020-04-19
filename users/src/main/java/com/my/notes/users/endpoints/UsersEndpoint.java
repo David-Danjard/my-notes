@@ -27,10 +27,10 @@ public class UsersEndpoint {
 
     @PayloadRoot(namespace = XSD_NAMESPACE, localPart = "userListRequest")
     @ResponsePayload
-    public UserList getUsers(@RequestPayload UserListRequest userListRequest){
+    public UserList getUsers(@RequestPayload UserListRequest userListRequest) throws UserException {
         UserList userList = new UserList();
         userList.getUserBean().addAll(
-                usersServices.getUsers()
+                usersServices.getUsers(userListRequest.getUserId())
         );
         return userList;
     }

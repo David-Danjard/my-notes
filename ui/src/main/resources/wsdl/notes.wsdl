@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:notes="http://mynotes.com/wsdl/notes" xmlns:xd="http://schemas.xmlsoap.org/wsdl/"
+                  targetNamespace="http://mynotes.com/wsdl/notes">
+    <wsdl:documentation>
+        Champ libre pour la documentation de la wsdl
+    </wsdl:documentation>
+    <!-- Definition des types -->
+    <wsdl:types>
+        <xsd:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="SimpleResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="status" type="xs:string"/>
+                        <xs:element name="message" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Fault">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="errorCode" type="xs:string"/>
+                        <xs:element name="errorMessage" type="xs:string"/>
+                        <xs:element name="stackTrace" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetNotesByUserRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="userId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Note">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:int" minOccurs="0"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="content" type="xs:string"/>
+                        <xs:element name="owner" type="xs:int"/>
+                        <xs:element name="createdAt" minOccurs="0">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:dateTime"/>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="updatedAt" minOccurs="0">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:dateTime"/>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="NoteUpdate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:int"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="content" type="xs:string"/>
+                        <xs:element name="owner" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="NoteList">
+                <xs:complexType>
+                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="Notes">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="id" type="xs:int"/>
+                                    <xs:element name="title" type="xs:string"/>
+                                    <xs:element name="content" type="xs:string"/>
+                                    <xs:element name="owner" type="xs:int"/>
+                                    <xs:element name="createdAt">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:dateTime"/>
+                                        </xs:simpleType>
+                                    </xs:element>
+                                    <xs:element name="updatedAt">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:dateTime"/>
+                                        </xs:simpleType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DeleteNoteRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ShareNoteRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="noteId" type="xs:int"/>
+                        <xs:element name="userId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetNoteRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- Definition des messages -->
+    <wsdl:message name="SimpleResponse">
+        <wsdl:part name="SimpleResponse" element="SimpleResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Fault">
+        <wsdl:part name="Fault" element="Fault"/>
+    </wsdl:message>
+    <wsdl:message name="GetNotesByUserRequest">
+        <wsdl:part name="GetNotesByUserRequest" element="GetNotesByUserRequest"/>
+    </wsdl:message>
+    <wsdl:message name="Note">
+        <wsdl:part name="Note" element="Note"/>
+    </wsdl:message>
+    <wsdl:message name="NoteUpdate">
+        <wsdl:part name="NoteUpdate" element="NoteUpdate"/>
+    </wsdl:message>
+    <wsdl:message name="NoteList">
+        <wsdl:part name="NoteList" element="NoteList"/>
+    </wsdl:message>
+    <wsdl:message name="DeleteNoteRequest">
+        <wsdl:part name="DeleteNoteRequest" element="DeleteNoteRequest"/>
+    </wsdl:message>
+    <wsdl:message name="ShareNoteRequest">
+        <wsdl:part name="ShareNoteRequest" element="ShareNoteRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetNoteRequest">
+        <wsdl:part name="GetNoteRequest" element="GetNoteRequest"/>
+    </wsdl:message>
+
+    <!-- Definition des operations -->
+    <wsdl:portType name="notesServicesPort">
+        <wsdl:operation name="getNotesByUser">
+            <wsdl:input message="notes:GetNotesByUserRequest"/>
+            <wsdl:output message="notes:NoteList"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="getNote">
+            <wsdl:input message="notes:GetNoteRequest"/>
+            <wsdl:output message="notes:Note"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="addNote">
+            <wsdl:input message="notes:Note"/>
+            <wsdl:output message="notes:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="noteUpdate">
+            <wsdl:input message="notes:NoteUpdate"/>
+            <wsdl:output message="notes:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="deleteNote">
+            <wsdl:input message="notes:DeleteNoteRequest"/>
+            <wsdl:output message="notes:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="shareNote">
+            <wsdl:input message="notes:ShareNoteRequest"/>
+            <wsdl:output message="notes:SimpleResponse"/>
+            <wsdl:fault name="Fault" message="notes:Fault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- Binding SoapAction / Operations / messages -->
+    <wsdl:binding name="eventServicesPortHTTPBinding" type="notes:notesServicesPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getNotesByUser">
+            <soap:operation soapAction="/getNotesByUser"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="GetNotesByUserRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="NoteList"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getNote">
+            <soap:operation soapAction="/getNote"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="GetNoteRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="Note"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addNote">
+            <soap:operation soapAction="/addNote"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="Note"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="noteUpdate">
+            <soap:operation soapAction="/NoteUpdate"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="NoteUpdate"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteNote">
+            <soap:operation soapAction="/deleteNote"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="DeleteNoteRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse"/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="shareNote">
+            <soap:operation soapAction="/shareNote"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="ShareNoteRequest "/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="SimpleResponse "/>
+            </wsdl:output>
+            <wsdl:fault name="Fault">
+                <soap:fault use="literal" name="Fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- Definition de l'URL du service -->
+    <wsdl:service name="notesService">
+        <wsdl:port name="eventServicesPortHTTP" binding="notes:eventServicesPortHTTPBinding">
+            <soap:address location="http://localhost:8080/notes-service/ws/notes"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
