@@ -1,6 +1,8 @@
 package com.my.notes.notes.configuration;
 
+import com.my.notes.email.Email;
 import com.my.notes.notes.services.soap.SoapClient;
+import com.my.notes.notes.services.validation.XsdMessageValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,7 +55,7 @@ public class SoapClientsConfig {
 
     @Bean("mailsSoapClient")
     public SoapClient mailsSoapClient(@Qualifier("mailsMarshaller") Jaxb2Marshaller jaxb2Marshaller) {
-        SoapClient soapClient = new SoapClient(mailsUserName, mailsPwd);
+        SoapClient soapClient = new SoapClient(mailsUserName, mailsPwd, new XsdMessageValidator("xsd/email.xsd", Email.class));
         soapClient.setDefaultUri(mailsWsUrl);
         soapClient.setMarshaller(jaxb2Marshaller);
         soapClient.setUnmarshaller(jaxb2Marshaller);
