@@ -104,6 +104,19 @@
 							<clearOutputDir>false</clearOutputDir>
 						</configuration>
 					</execution>
+					<execution>
+						<id>xjc-4</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.basedir}/src/main/resources/xsd/user.xsd</source>
+							</sources>
+							<clearOutputDir>false</clearOutputDir>
+							<arguments>-extension</arguments>
+						</configuration>
+					</execution>
 				</executions>
 				<configuration>
 					<sources>

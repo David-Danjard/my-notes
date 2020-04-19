@@ -24,6 +24,13 @@ public class SoapClientsConfig {
     @Value("${services.soap.notes.pwd}")
     private String notesPwd;
 
+    @Value("${services.soap.users.url}")
+    private String usersWsUrl;
+    @Value("${services.soap.users.username}")
+    private String usersUserName;
+    @Value("${services.soap.users.pwd}")
+    private String usersPwd;
+
     /* -------------------- Authentication -------------------- */
 
     @Bean("authMarshaller")
@@ -55,6 +62,24 @@ public class SoapClientsConfig {
     public SoapClient notesSoapClient(@Qualifier("notesMarshaller") Jaxb2Marshaller jaxb2Marshaller) {
         SoapClient soapClient = new SoapClient(notesUserName, notesPwd);
         soapClient.setDefaultUri(notesWsUrl);
+        soapClient.setMarshaller(jaxb2Marshaller);
+        soapClient.setUnmarshaller(jaxb2Marshaller);
+        return soapClient;
+    }
+
+    /* ---------------------- Users ---------------------- */
+
+    @Bean("usersMarshaller")
+    public Jaxb2Marshaller usersMarshaller() {
+        Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+        jaxb2Marshaller.setContextPaths("my_notes.notes.user");
+        return jaxb2Marshaller;
+    }
+
+    @Bean("usersSoapClient")
+    public SoapClient usersSoapClient(@Qualifier("usersMarshaller") Jaxb2Marshaller jaxb2Marshaller) {
+        SoapClient soapClient = new SoapClient(usersUserName, usersPwd);
+        soapClient.setDefaultUri(usersWsUrl);
         soapClient.setMarshaller(jaxb2Marshaller);
         soapClient.setUnmarshaller(jaxb2Marshaller);
         return soapClient;

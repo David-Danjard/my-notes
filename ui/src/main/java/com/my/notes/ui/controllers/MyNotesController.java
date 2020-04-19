@@ -1,7 +1,7 @@
 package com.my.notes.ui.controllers;
 
 import com.my.notes.ui.repository.NotesRepo;
-import com.my.notes.ui.repository.UserRepo;
+import com.my.notes.ui.services.business.UsersServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,17 +13,17 @@ import javax.servlet.http.HttpServletRequest;
 public class MyNotesController {
 
     private final NotesRepo notesRepo;
-    private final UserRepo userRepo;
+    private final UsersServices usersServices;
 
-    public MyNotesController(NotesRepo notesRepo, UserRepo userRepo) {
+    public MyNotesController(NotesRepo notesRepo, UsersServices usersServices) {
         this.notesRepo = notesRepo;
-        this.userRepo = userRepo;
+        this.usersServices = usersServices;
     }
 
     @GetMapping("/")
     public String indexPage(Model model) {
         model.addAttribute("notes", notesRepo.getNotes());
-        model.addAttribute("users", userRepo.getUsers());
+        model.addAttribute("users", usersServices.getUsers().getUserBean());
         return "index";
     }
 
@@ -35,7 +35,7 @@ public class MyNotesController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
         request.logout();
-        return "redirect:/accueil";
+        return "redirect:/";
     }
 
 }
