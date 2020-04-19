@@ -1,13 +1,11 @@
 package com.my.notes.ui.endpoints;
 
-import com.my.notes.ui.repository.NotesRepo;
 import com.my.notes.ui.services.business.NotesServices;
 import com.my.notes.ui.services.business.UsersServices;
 import generated.Note;
 import generated.SimpleResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class MyNotesRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MyNotesRestController.class);
-    private final NotesRepo notesRepo;
     private final NotesServices notesServices;
     private final UsersServices usersServices;
 
-    public MyNotesRestController(NotesRepo notesRepo, NotesServices notesServices, UsersServices usersServices) {
-        this.notesRepo = notesRepo;
+    public MyNotesRestController(NotesServices notesServices, UsersServices usersServices) {
         this.notesServices = notesServices;
         this.usersServices = usersServices;
     }
@@ -45,7 +41,7 @@ public class MyNotesRestController {
 
     @DeleteMapping("/{id}")
     public void deleteNote(@PathVariable("id") int id) {
-        notesRepo.deleteById(id);
+        notesServices.deleteNote(id);
     }
 
     @PutMapping("/update")

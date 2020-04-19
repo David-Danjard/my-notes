@@ -3,8 +3,6 @@ package com.my.notes.ui.services.business;
 import com.my.notes.ui.services.soap.SoapClient;
 import generated.*;
 import my_notes.notes.user.UserBean;
-import my_notes.notes.user.UserByMailRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
@@ -49,6 +47,12 @@ public class NotesServices {
         noteUpdate.setTitle(note.getContent());
         noteUpdate.setId(note.getId());
         notesSoapClient.callWebService(noteUpdate, new SoapActionCallback("/NoteUpdate"));
+    }
+
+    public void deleteNote(int noteId) {
+        DeleteNoteRequest deleteNoteRequest = new DeleteNoteRequest();
+        deleteNoteRequest.setId(noteId);
+        notesSoapClient.callWebService(deleteNoteRequest, new SoapActionCallback("/deleteNote"));
     }
 
 }
