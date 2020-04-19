@@ -11,9 +11,10 @@ public class SoapClient extends WebServiceGatewaySupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SoapClient.class);
 
-    public Object callWebService(Object request, WebServiceMessageCallback msgCallback) {
+    public Object callWebService(Object request, WebServiceMessageCallback msgCallback, String userName, String pwd) {
         WebServiceTemplate webServiceTemplate = getWebServiceTemplate();
         LOGGER.info("Call service url {}", webServiceTemplate.getDefaultUri());
+        webServiceTemplate.setMessageSender(new CustomWebServiceMessageSender(userName, pwd));
         Object response;
         try {
             response = webServiceTemplate.marshalSendAndReceive(request, msgCallback);
