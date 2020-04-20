@@ -20,6 +20,14 @@ import java.util.List;
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
 
+    @Override
+    public void addInterceptors(List<EndpointInterceptor> interceptors) {
+        PayloadValidatingInterceptor payloadValidatingInterceptor = new PayloadValidatingInterceptor();
+        payloadValidatingInterceptor.setValidateRequest(true);
+        payloadValidatingInterceptor.setXsdSchema(mailSchema());
+        interceptors.add(payloadValidatingInterceptor);
+    }
+
     @Bean
     public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
