@@ -1,13 +1,13 @@
 package com.my.notes.notes.configuration;
 
-import com.my.notes.email.Email;
 import com.my.notes.notes.services.soap.SoapClient;
-import com.my.notes.notes.services.validation.XsdMessageValidator;
+import com.my.notes.notes.services.validation.XsdValidationClientInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.client.support.interceptor.ClientInterceptor;
 
 @Configuration
 public class SoapClientsConfig {
@@ -55,10 +55,12 @@ public class SoapClientsConfig {
 
     @Bean("mailsSoapClient")
     public SoapClient mailsSoapClient(@Qualifier("mailsMarshaller") Jaxb2Marshaller jaxb2Marshaller) {
-        SoapClient soapClient = new SoapClient(mailsUserName, mailsPwd, new XsdMessageValidator("xsd/email.xsd", Email.class));
+        SoapClient soapClient = new SoapClient(mailsUserName, mailsPwd);
         soapClient.setDefaultUri(mailsWsUrl);
         soapClient.setMarshaller(jaxb2Marshaller);
         soapClient.setUnmarshaller(jaxb2Marshaller);
+        ClientInterceptor[] clientInterceptors = {new XsdValidationClientInterceptor("xsd/email.xsd")};
+        soapClient.setInterceptors(clientInterceptors);
         return soapClient;
     }
 
